@@ -13,7 +13,8 @@ import (
 )
 
 func main() {
-	outPath := os.Args[1]
+	outPath := path.Join(os.Args[1], "../network")
+	os.MkdirAll(outPath, 0660)
 
 	metadata := fetchMetadata()
 	log.Printf("received metadata, configuring host %s", metadata.Hostname)
