@@ -9,6 +9,7 @@ import (
 	"os"
 	"path"
 
+	"github.com/coreos/go-systemd/daemon"
 	"github.com/coreos/go-systemd/unit"
 )
 
@@ -46,6 +47,8 @@ func main() {
 			log.Fatalf("couldn't write unit file: %s", err)
 		}
 	}
+
+	daemon.SdNotify("READY=1")
 }
 
 func (dns *DNS) toUnitOptions() (opts []*unit.UnitOption) {

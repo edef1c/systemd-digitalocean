@@ -3,5 +3,17 @@ let
   generator = pkgs.callPackage ./. {};
 in {
   systemd.network.enable = true;
-  systemd.generators.systemd-digitalocean-generator = "${generator}/bin/systemd-digitalocean-generator";
+  systemd.services.digitalocean = {
+    after = [ "network-pre.target" ];
+
+    serviceConfig.Type = "notify";
+    serviceConfig.ExecStart = "${generator}/bin/systemd-digitalocean-generator";
+
+    serviceConfig.Restart = "on-failure";
+    serviceConfig.RestartSec = 0;
+  };
+  systemd.services.systemd-networkd = {
+    after = [ "digitalocean.service" ];
+    wants = [ "digitalocean.service" ];
+  };
 }
