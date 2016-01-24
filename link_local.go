@@ -38,6 +38,18 @@ func setupLinkLocalNetworking() {
 		IP:   net.IPv4(169, 254, 0, 1),
 		Mask: net.IPv4Mask(255, 255, 0, 0),
 	}}); err != nil {
-		log.Fatalf("couldn't set up link-local networking: %s", err)
+		log.Fatalf("couldn't add link-local address: %s", err)
+	}
+
+	if err := netlink.RouteAdd(&netlink.Route{
+		LinkIndex: device.Index,
+		Scope:     netlink.SCOPE_LINK,
+		Priority:  2048, // IPV4LL_ROUTE_METRIC
+		Dst: &net.IPNet{
+			IP:   net.IPv4(169, 254, 0, 0),
+			Mask: net.IPv4Mask(255, 255, 0, 0),
+		},
+	}); err != nil {
+		log.Fatalf("couldn't add link-local route: %s", err)
 	}
 }
