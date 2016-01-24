@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"net"
-	"syscall"
 
 	"github.com/vishvananda/netlink"
 )
@@ -11,12 +10,6 @@ import (
 var metadataIP = net.IPv4(169, 254, 169, 254)
 
 func setupLinkLocalNetworking() {
-	if _, err := netlink.RouteGet(metadataIP); err != syscall.ENETUNREACH {
-		return
-	}
-
-	log.Printf("can't reach %s, adding address…", metadataIP)
-
 	links, err := netlink.LinkList()
 	if err != nil {
 		log.Fatalf("couldn't list network links: %s", err)
