@@ -8,6 +8,7 @@ import (
 	"net"
 	"os"
 	"path"
+	"path/filepath"
 
 	"github.com/coreos/go-systemd/daemon"
 	"github.com/coreos/go-systemd/unit"
@@ -39,6 +40,16 @@ func main() {
 			}
 			buf := unit.Serialize(opts).(*bytes.Buffer)
 			units[file] = buf
+		}
+	}
+
+	matches, err := filepath.Glob(path.Join(outPath, "digitalocean-*-*.network"))
+	if err != nil {
+		log.Printf("couldn't list old network units: %s", err)
+	}
+	for _, match := range matches {
+		if err := os.Remove(match); err != nil {
+			log.Printf("couldn't remove old network unit: %s", err)
 		}
 	}
 
