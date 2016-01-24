@@ -13,8 +13,14 @@ import (
 )
 
 func main() {
-	outPath := path.Join(os.Args[1], "../network")
-	os.MkdirAll(outPath, 0660)
+	outPath := path.Join("/run/systemd/network")
+	err := os.Mkdir(outPath, 0755)
+	if os.IsExist(err) {
+		err = os.Chmod(outPath, 0755)
+	}
+	if err != nil {
+		log.Fatalf("couldn't set up output directory: %s", err)
+	}
 
 	metadata := fetchMetadata()
 	log.Printf("received metadata, configuring host %s", metadata.Hostname)
