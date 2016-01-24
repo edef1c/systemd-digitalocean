@@ -2,6 +2,7 @@
 let
   generator = pkgs.callPackage ./. {};
 in {
+  networking.useDHCP = false;
   systemd.network.enable = true;
   systemd.services.digitalocean = {
     after = [ "network-pre.target" ];
