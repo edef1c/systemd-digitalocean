@@ -69,7 +69,6 @@ func (iface *Interface) toUnitOptions() (opts []*unit.UnitOption) {
 	}
 	opts = append(opts, iface.IPv4.toUnitOptions()...)
 	opts = append(opts, iface.IPv6.toUnitOptions()...)
-	opts = append(opts, iface.AnchorIPv4.toUnitOptions()...)
 	if len(opts) == 0 {
 		return nil
 	}
