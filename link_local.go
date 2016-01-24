@@ -15,6 +15,8 @@ func setupLinkLocalNetworking() {
 		return
 	}
 
+	log.Printf("can't reach %s, adding address…", metadataIP)
+
 	links, err := netlink.LinkList()
 	if err != nil {
 		log.Fatalf("couldn't list network links: %s", err)
