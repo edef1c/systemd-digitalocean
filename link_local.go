@@ -41,6 +41,10 @@ func setupLinkLocalNetworking() {
 		log.Fatalf("couldn't add link-local address: %s", err)
 	}
 
+	if err := netlink.LinkSetUp(device); err != nil {
+		log.Fatalf("couldn't bring link up: %s", err)
+	}
+
 	if err := netlink.RouteAdd(&netlink.Route{
 		LinkIndex: device.Index,
 		Scope:     netlink.SCOPE_LINK,
